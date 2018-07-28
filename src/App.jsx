@@ -12,7 +12,7 @@ class BooksApp extends React.Component {
   }
   componentDidMount() {
     const books = JSON.parse(localStorage.getItem('books'))
-    if (books.length > 0) this.setState({ books })
+    if (books !== null && books.length > 0) this.setState({ books })
     console.log(books)
     if(!(localStorage.getItem('books'))) {
       getAll().then((books)=> {
@@ -23,7 +23,7 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book, shelf) => {
-    let newBooks = this.state.books
+    let newBooks = this.state.books.slice(0)
     for (let i=0; i<newBooks.length; i++) {
       if (newBooks[i].id === book.id) {
         newBooks[i].shelf = shelf
