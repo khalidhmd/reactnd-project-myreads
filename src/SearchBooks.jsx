@@ -21,7 +21,7 @@ class SearchBooks extends React.Component {
           const match = new RegExp(escapeRegExp(this.state.query), 'i')
           showingBooks = this.props.books.filter((book) => match.test(book.title) || match.test(book.authors.join()))
         } else {
-          showingBooks = this.props.books
+          showingBooks = []
         }
 
         showingBooks.sort(sortBy('name'))
