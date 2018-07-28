@@ -2,6 +2,12 @@ import React from 'react'
 
 class Book extends React.Component {
   render() {
+    let authors
+    if (this.props.authors) {
+      authors = this.props.authors.splice(0)
+    } else {
+      authors = []
+    }
     return (
       <div className="book">
         <div className="book-top">
@@ -11,7 +17,7 @@ class Book extends React.Component {
               width: 128,
               height: 193,
               backgroundImage:
-                `url(${this.props.book.imageLinks.smallThumbnail})`
+                `url(${this.props.book.imageLinks ? this.props.book.imageLinks.smallThumbnail : null})`
             }}
           />
           <div className="book-shelf-changer">
@@ -27,7 +33,7 @@ class Book extends React.Component {
           </div>
         </div>
         <div className="book-title">{this.props.book.title}</div>
-        <div className="book-authors">{this.props.book.authors.map((author, index) => (
+        <div className="book-authors">{authors.map((author, index) => (
             <p key={index}>{author}</p>
           ))}</div>
       </div>

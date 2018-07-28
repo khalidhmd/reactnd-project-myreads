@@ -1,30 +1,41 @@
-import React from "react";
+import React from "react"
 import { Link } from 'react-router-dom'
-import './App.css';
-import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by'
+import './App.css'
 import Book from './Book'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends React.Component {
 
   state = {
-    query: ''
+    query: '',
+    showingBooks: []
   }
 
   updateQuery = (query) => {
-    this.setState({ query: query })
+    this.setState({query})
+    let showingBooks = []
+    if (query) {
+      BooksAPI.search(query).then(response => {
+        if (response.length) {
+          showingBooks = response.map(b => {
+            const index = this.props.books.findIndex(c => c.id === b.id)
+            b.shelf = 'none'
+            if( index >= 0 ) {
+              return this.props.books[index]
+            } else {
+              return b
+            }
+          })
+        }
+        this.setState({showingBooks})
+      })
+    }
+    else {
+      this.setState({showingBooks})
+    }
   }
 
     render() {
-      let showingBooks
-        if (this.state.query) {
-          const match = new RegExp(escapeRegExp(this.state.query), 'i')
-          showingBooks = this.props.books.filter((book) => match.test(book.title) || match.test(book.authors.join()))
-        } else {
-          showingBooks = []
-        }
-
-        showingBooks.sort(sortBy('name'))
 
         return (
             <div className="search-books">
@@ -46,7 +57,7 @@ class SearchBooks extends React.Component {
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {showingBooks.map(book => (
+                {this.state.showingBooks.map(book => (
                   <li key={book.id}>
                     <Book
                       book = {book}

@@ -23,16 +23,21 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book, shelf) => {
+    book.shelf = shelf
     let newBooks = this.state.books.slice(0)
+    let found = false
     for (let i=0; i<newBooks.length; i++) {
       if (newBooks[i].id === book.id) {
         newBooks[i].shelf = shelf
+        found = true
         break
       }
     }
+    if (!found) newBooks.push(book)
     this.setState({books: newBooks})
     localStorage.setItem('books', JSON.stringify(newBooks))
   }
+  
 
   render() {
     return (
